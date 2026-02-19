@@ -22,7 +22,7 @@ def exportar_excel(jobs):
     # Si no existe historial lo crea
     if not os.path.exists(HISTORIAL_FILE):
         df_nuevos[["link"]].to_csv(HISTORIAL_FILE, index=False)
-        df_nuevos.to_excel("trabajos_nuevos.xlsx", index=False)
+        df_nuevos.to_excel("trabajos_encontrados.xlsx", index=False)
         print("📂 Historial creado.")
         return
 
@@ -36,7 +36,7 @@ def exportar_excel(jobs):
         return
 
     # Guardar nuevos en Excel
-    nuevos.to_excel("trabajos_nuevos.xlsx", index=False)
+    nuevos.to_excel("trabajos_encontrados.xlsx", index=False)
 
     # Actualizar historial
     df_actualizado = pd.concat([df_historial, nuevos[["link"]]])
