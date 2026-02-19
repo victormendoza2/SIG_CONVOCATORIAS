@@ -29,28 +29,34 @@ def filtro_inteligente(jobs):
             filtrados.append(job)
 
     return filtrados
-    
+
+
 def main():
 
     print("🚀 Buscando trabajos multipágina...")
 
     jobs_total = []
 
-    jobs = buscar_trabajos()
+    # 🔹 RemoteOK
+    jobs_remote = buscar_remoteok()
+    print(f"RemoteOK encontrados: {len(jobs_remote)}")
+    jobs_total.extend(jobs_remote)
 
-print(f"Total encontrados: {len(jobs)}")
-
-jobs_filtrados = filtro_inteligente(jobs)
-
-print(f"Después del filtro SIG/Data: {len(jobs_filtrados)}")
-
-exportar_excel(jobs_filtrados)
+    # 🔹 Gob Perú
+    jobs_gob = buscar_gob_peru()
+    print(f"Gob Perú encontrados: {len(jobs_gob)}")
+    jobs_total.extend(jobs_gob)
 
     print(f"Total encontrados: {len(jobs_total)}")
 
-    exportar_excel(jobs_total)
+    # 🔎 Aplicar filtro
+    jobs_filtrados = filtro_inteligente(jobs_total)
+
+    print(f"Después del filtro SIG/Data: {len(jobs_filtrados)}")
+
+    # 📊 Exportar
+    exportar_excel(jobs_filtrados)
 
 
 if __name__ == "__main__":
     main()
-
