@@ -10,6 +10,12 @@ def generar_dashboard(jobs):
 
     df = pd.DataFrame(jobs)
 
+    # Convertir links en botones
+    if "link" in df.columns:
+        df["Ver"] = df["link"].apply(
+            lambda x: f'<a href="{x}" target="_blank">🔗 Ver</a>'
+        )
+
     os.makedirs("docs", exist_ok=True)
 
     fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
@@ -17,38 +23,53 @@ def generar_dashboard(jobs):
     html_content = f"""
     <html>
     <head>
-        <title>Dashboard Vacantes SIG</title>
+        <title>Dashboard SIG / Data</title>
         <style>
             body {{
                 font-family: Arial;
                 margin: 40px;
-                background-color: #f5f5f5;
+                background-color: #f4f6f9;
             }}
             h1 {{
-                color: #2c3e50;
+                color: #1f2d3d;
+            }}
+            .card {{
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             }}
             table {{
                 border-collapse: collapse;
                 width: 100%;
-                background: white;
             }}
             th, td {{
                 border: 1px solid #ddd;
                 padding: 8px;
+                text-align: left;
             }}
             th {{
-                background-color: #2c3e50;
+                background-color: #1f2d3d;
                 color: white;
             }}
             tr:hover {{
-                background-color: #f2f2f2;
+                background-color: #f1f1f1;
+            }}
+            a {{
+                text-decoration: none;
+                font-weight: bold;
             }}
         </style>
     </head>
     <body>
-        <h1>Vacantes SIG / Data</h1>
+
+        <h1>📊 Vacantes SIG / Data / Consultoría</h1>
         <p>Última actualización: {fecha}</p>
-        {df.to_html(index=False, escape=False)}
+
+        <div class="card">
+            {df.to_html(index=False, escape=False)}
+        </div>
+
     </body>
     </html>
     """
@@ -56,4 +77,4 @@ def generar_dashboard(jobs):
     with open("docs/index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    print("🌐 Dashboard generado en docs/index.html")
+    print("🌐 Dashboard mejorado generado.")
