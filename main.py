@@ -20,14 +20,43 @@ EXCLUIR = [
 def clasificar_trabajo(texto):
     texto = texto.lower()
 
-    if "consultor" in texto:
-        return "Consultoría"
+    # SIG / GIS fuerte
+    if any(p in texto for p in [
+        "sistemas de informacion geografica",
+        "sistema de informacion geografica",
+        "geografica",
+        "geoespacial",
+        "arcgis",
+        "qgis",
+        "gis",
+        "sig",
+        "cartografia"
+    ]):
+        return "SIG"
+
+    # Power BI
     if "power bi" in texto:
         return "Power BI"
-    if "arcgis" in texto or "qgis" in texto or "sig" in texto or "gis" in texto:
-        return "SIG"
-    if "data" in texto or "analisis de datos" in texto:
+
+    # Data
+    if any(p in texto for p in [
+        "analista de datos",
+        "data analyst",
+        "ciencia de datos",
+        "data science",
+        "analisis de datos"
+    ]):
         return "Data"
+
+    # Consultoría
+    if any(p in texto for p in [
+        "consultor",
+        "consultoria",
+        "términos de referencia",
+        "tdr"
+    ]):
+        return "Consultoría"
+
     return "Otros"
     
 def filtro_inteligente(jobs):
