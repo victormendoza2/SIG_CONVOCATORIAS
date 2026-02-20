@@ -55,6 +55,38 @@ def clasificar_trabajo(texto):
         return "Consultoría"
 
     return "Otros"
+
+def clasificar_entidad(job):
+    empresa = job.get("empresa", "").lower()
+    link = job.get("link", "").lower()
+
+    if any(p in empresa for p in [
+        "ministerio",
+        "muni",
+        "municipalidad",
+        "gobierno",
+        "ana",
+        "minam",
+        "serfor",
+        "cenepred",
+        "gore"
+    ]):
+        return "Estado Perú"
+
+    if any(p in empresa for p in [
+        "ong",
+        "fundación",
+        "fundacion",
+        "unicef",
+        "pnud",
+        "wwf"
+    ]):
+        return "ONG"
+
+    if "teamtailor" in link:
+        return "Privado - Portal"
+
+    return "Privado"
     
 def filtro_inteligente(jobs):
     filtrados = []
@@ -98,6 +130,7 @@ def main():
     for job in jobs_filtrados:
         texto = job.get("titulo", "") + " " + job.get("descripcion", "")
         job["categoria"] = clasificar_trabajo(texto)
+        job["tipo_entidad"] = clasificar_entidad(job)
 
     # 📊 Exportar
     exportar_excel(jobs_filtrados)
