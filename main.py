@@ -17,6 +17,19 @@ EXCLUIR = [
     "ventas", "call center"
 ]
 
+def clasificar_trabajo(texto):
+    texto = texto.lower()
+
+    if "consultor" in texto:
+        return "Consultoría"
+    if "power bi" in texto:
+        return "Power BI"
+    if "arcgis" in texto or "qgis" in texto or "sig" in texto or "gis" in texto:
+        return "SIG"
+    if "data" in texto or "analisis de datos" in texto:
+        return "Data"
+    return "Otros"
+    
 def filtro_inteligente(jobs):
     filtrados = []
 
@@ -54,6 +67,11 @@ def main():
     jobs_filtrados = filtro_inteligente(jobs_total)
 
     print(f"Después del filtro SIG/Data: {len(jobs_filtrados)}")
+
+    # 🧠 🔥 AQUI agregamos categoría
+    for job in jobs_filtrados:
+        texto = job.get("titulo", "") + " " + job.get("descripcion", "")
+        job["categoria"] = clasificar_trabajo(texto)
 
     # 📊 Exportar
     exportar_excel(jobs_filtrados)
