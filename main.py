@@ -1,3 +1,4 @@
+from dashboard_generator import generar_dashboard
 from remoteok_scraper import buscar_remoteok
 from peru_gov_scraper import buscar_gob_peru
 from excel_export import exportar_excel
@@ -56,6 +57,7 @@ def main():
 
     # 📊 Exportar
     exportar_excel(jobs_filtrados)
+    generar_dashboard(jobs_filtrados)
 
 
 if __name__ == "__main__":
