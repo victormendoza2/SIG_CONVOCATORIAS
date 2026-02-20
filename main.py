@@ -20,41 +20,38 @@ EXCLUIR = [
 def clasificar_trabajo(texto):
     texto = texto.lower()
 
-    # SIG / GIS fuerte
-    if any(p in texto for p in [
+    sig_keywords = [
+        "sistemas de información geográfica",
+        "sistema de información geográfica",
         "sistemas de informacion geografica",
         "sistema de informacion geografica",
-        "geografica",
-        "geoespacial",
         "arcgis",
         "qgis",
         "gis",
         "sig",
+        "geoespacial",
+        "cartografía",
         "cartografia"
-    ]):
-        return "SIG"
+    ]
 
-    # Power BI
-    if "power bi" in texto:
-        return "Power BI"
-
-    # Data
-    if any(p in texto for p in [
+    data_keywords = [
         "analista de datos",
         "data analyst",
         "ciencia de datos",
         "data science",
         "analisis de datos"
-    ]):
+    ]
+
+    if any(p in texto for p in sig_keywords):
+        return "SIG"
+
+    if "power bi" in texto:
+        return "Power BI"
+
+    if any(p in texto for p in data_keywords):
         return "Data"
 
-    # Consultoría
-    if any(p in texto for p in [
-        "consultor",
-        "consultoria",
-        "términos de referencia",
-        "tdr"
-    ]):
+    if any(p in texto for p in ["consultor", "consultoría", "consultoria", "tdr"]):
         return "Consultoría"
 
     return "Otros"
