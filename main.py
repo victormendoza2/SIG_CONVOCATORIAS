@@ -3,32 +3,57 @@ from remoteok_scraper import buscar_remoteok
 from peru_gov_scraper import buscar_gob_peru
 from excel_export import exportar_excel
 
-# 🔎 Palabras clave SIG / Data
+
+# 🔎 Palabras clave reales (más estrictas)
 PALABRAS_CLAVE = [
-    "sig", "gis", "arcgis", "qgis",
-    "power bi", "analisis de datos",
-    "data analyst", "geoespacial",
-    "cartografia", "consultor", "consultoria"
+    # SIG reales
+    "sistemas de información geográfica",
+    "sistemas de informacion geografica",
+    "arcgis",
+    "qgis",
+    "geoespacial",
+    "cartografia",
+    "cartografía",
+
+    # Data específicos
+    "analista de datos",
+    "data analyst",
+    "ciencia de datos",
+    "power bi",
+
+    # Consultoría
+    "consultor",
+    "consultoria",
+    "consultoría",
+    "tdr"
 ]
 
-# ❌ Excluir
+# ❌ Excluir basura
 EXCLUIR = [
-    "practica", "voluntariado",
-    "ventas", "call center"
+    "practica",
+    "voluntariado",
+    "ventas",
+    "call center",
+    "graphic designer",
+    "ux",
+    "ui",
+    "marketing",
+    "sales",
+    "qa engineer",
+    "c++",
+    "frontend",
+    "backend"
 ]
+
 
 def clasificar_trabajo(texto):
     texto = texto.lower()
 
     sig_keywords = [
         "sistemas de información geográfica",
-        "sistema de información geográfica",
         "sistemas de informacion geografica",
-        "sistema de informacion geografica",
         "arcgis",
         "qgis",
-        "gis",
-        "sig",
         "geoespacial",
         "cartografía",
         "cartografia"
@@ -37,9 +62,7 @@ def clasificar_trabajo(texto):
     data_keywords = [
         "analista de datos",
         "data analyst",
-        "ciencia de datos",
-        "data science",
-        "analisis de datos"
+        "ciencia de datos"
     ]
 
     if any(p in texto for p in sig_keywords):
@@ -56,14 +79,15 @@ def clasificar_trabajo(texto):
 
     return "Otros"
 
+
 def clasificar_entidad(job):
     empresa = job.get("empresa", "").lower()
     link = job.get("link", "").lower()
 
     if any(p in empresa for p in [
         "ministerio",
-        "muni",
         "municipalidad",
+        "muni",
         "gobierno",
         "ana",
         "minam",
@@ -87,7 +111,8 @@ def clasificar_entidad(job):
         return "Privado - Portal"
 
     return "Privado"
-    
+
+
 def filtro_inteligente(jobs):
     filtrados = []
 
@@ -105,7 +130,7 @@ def filtro_inteligente(jobs):
 
 def main():
 
-    print("🚀 Buscando trabajos multipágina...")
+    print("🚀 Buscando trabajos...")
 
     jobs_total = []
 
@@ -121,18 +146,21 @@ def main():
 
     print(f"Total encontrados: {len(jobs_total)}")
 
-    # 🔎 Aplicar filtro
+    # 🔎 Aplicar filtro inteligente
     jobs_filtrados = filtro_inteligente(jobs_total)
-
     print(f"Después del filtro SIG/Data: {len(jobs_filtrados)}")
 
-    # 🧠 🔥 AQUI agregamos categoría
+    # 🧠 Clasificar categoría y entidad
     for job in jobs_filtrados:
         texto = job.get("titulo", "") + " " + job.get("descripcion", "")
         job["categoria"] = clasificar_trabajo(texto)
         job["tipo_entidad"] = clasificar_entidad(job)
 
-    # 📊 Exportar
+    # ❌ Eliminar categoría irrelevante
+    jobs_filtrados = [j for j in jobs_filtrados if j["categoria"] != "Otros"]
+    print(f"Después de eliminar Otros: {len(jobs_filtrados)}")
+
+    # 📊 Exportar resultados
     exportar_excel(jobs_filtrados)
     generar_dashboard(jobs_filtrados)
 
