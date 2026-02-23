@@ -2,6 +2,7 @@ from dashboard_generator import generar_dashboard
 from remoteok_scraper import buscar_remoteok
 from peru_gov_scraper import buscar_gob_peru
 from excel_export import exportar_excel
+from teamtailor_scraper import buscar_teamtailor
 
 
 PALABRAS_CLAVE = [
