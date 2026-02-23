@@ -1,3 +1,19 @@
+if not jobs:
+    html = """
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body>
+    <h1>No se encontraron vacantes hoy</h1>
+    <p>El sistema se actualizó correctamente.</p>
+    </body>
+    </html>
+    """
+
+    with open("docs/index.html", "w", encoding="utf-8") as f:
+        f.write(html)
+
+    return
+    
 import pandas as pd
 import os
 from datetime import datetime
