@@ -140,40 +140,34 @@ def main():
 
     jobs_total = []
 
-    # 🔹 RemoteOK
     jobs_remote = buscar_remoteok()
     print(f"RemoteOK encontrados: {len(jobs_remote)}")
     jobs_total.extend(jobs_remote)
 
-    # 🔹 Gob Perú
     jobs_gob = buscar_gob_peru()
     print(f"Gob Perú encontrados: {len(jobs_gob)}")
     jobs_total.extend(jobs_gob)
 
     print(f"Total encontrados: {len(jobs_total)}")
 
-    # 🔎 Aplicar filtro inteligente
     jobs_filtrados = filtro_inteligente(jobs_total)
     print(f"Después del filtro SIG/Data: {len(jobs_filtrados)}")
 
+    # 👇 DEBUG AQUÍ (DENTRO DE main)
     print("Ejemplos encontrados:")
-for j in jobs_filtrados[:3]:
-    print(j["titulo"])
+    for j in jobs_filtrados[:3]:
+        print(j["titulo"])
 
-    # 🧠 Clasificar categoría y entidad
     for job in jobs_filtrados:
         texto = job.get("titulo", "") + " " + job.get("descripcion", "")
         job["categoria"] = clasificar_trabajo(texto)
         job["tipo_entidad"] = clasificar_entidad(job)
 
-    # ❌ Eliminar categoría irrelevante
     jobs_filtrados = [j for j in jobs_filtrados if j["categoria"] != "Otros"]
     print(f"Después de eliminar Otros: {len(jobs_filtrados)}")
 
-    # 📊 Exportar resultados
     exportar_excel(jobs_filtrados)
     generar_dashboard(jobs_filtrados)
-
 
 if __name__ == "__main__":
     main()
