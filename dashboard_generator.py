@@ -1,112 +1,58 @@
-if not jobs:
-    html = """
-    <html>
-    <head><meta charset="UTF-8"></head>
-    <body>
-    <h1>No se encontraron vacantes hoy</h1>
-    <p>El sistema se actualizó correctamente.</p>
-    </body>
-    </html>
-    """
-
-    with open("docs/index.html", "w", encoding="utf-8") as f:
-        f.write(html)
-
-    return
-    
-import pandas as pd
 import os
 from datetime import datetime
 
 def generar_dashboard(jobs):
 
+    # Si no hay trabajos, generar dashboard vacío profesional
     if not jobs:
-        print("No hay datos para dashboard.")
+        html = """
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>SIG Convocatorias</title>
+        </head>
+        <body>
+            <h1>No se encontraron vacantes hoy</h1>
+            <p>El sistema se actualizó correctamente.</p>
+            <p>Fecha: {}</p>
+        </body>
+        </html>
+        """.format(datetime.now().strftime("%d/%m/%Y %H:%M"))
+
+        os.makedirs("docs", exist_ok=True)
+
+        with open("docs/index.html", "w", encoding="utf-8") as f:
+            f.write(html)
+
         return
 
-    df = pd.DataFrame(jobs)
+    # Si sí hay trabajos
+    contenido = ""
 
-    # Crear columna de enlace clickeable
-    if "link" in df.columns:
-        df["URL"] = df["link"].apply(lambda x: f'<a href="{x}" target="_blank">Ver oferta</a>')
+    for job in jobs:
+        contenido += f"""
+        <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+            <h2>{job.get('titulo')}</h2>
+            <p><b>Empresa:</b> {job.get('empresa')}</p>
+            <a href="{job.get('link')}" target="_blank">Ver más</a>
+        </div>
+        """
 
-    os.makedirs("docs", exist_ok=True)
-
-    fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
-
-    html_template = f"""
-    <!DOCTYPE html>
+    html = f"""
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>Dashboard Vacantes SIG / Data</title>
-
-        <!-- DataTables CSS -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
-
-        <style>
-            body {{
-                font-family: Arial, sans-serif;
-                margin: 20px;
-                background: #f5f5f5;
-            }}
-            h1 {{
-                color: #2c3e50;
-            }}
-        </style>
+        <title>SIG Convocatorias</title>
     </head>
     <body>
-        <h1>📊 Vacantes – SIG / Data / Consultoría</h1>
-        <p>Última actualización: {fecha}</p>
-
-        <table id="jobsTable" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Empresa</th>
-                    <th>Categoría</th>
-                    <th>URL</th>
-                </tr>
-            </thead>
-            <tbody>
-    """
-
-    for _, row in df.iterrows():
-        titulo = row.get("titulo", "")
-        empresa = row.get("empresa", "")
-        categoria = row.get("categoria", "")
-        url_html = row.get("URL", "")
-
-        html_template += f"""
-            <tr>
-                <td>{titulo}</td>
-                <td>{empresa}</td>
-                <td>{categoria}</td>
-                <td>{url_html}</td>
-            </tr>
-        """
-
-    html_template += """
-            </tbody>
-        </table>
-
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <!-- DataTables JS -->
-        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-
-        <script>
-            $(document).ready(function() {
-                $('#jobsTable').DataTable({
-                    "pageLength": 10
-                });
-            });
-        </script>
+        <h1>Convocatorias SIG & Data</h1>
+        <p>Actualizado: {datetime.now().strftime("%d/%m/%Y %H:%M")}</p>
+        {contenido}
     </body>
     </html>
     """
 
-    with open("docs/index.html", "w", encoding="utf-8") as f:
-        f.write(html_template)
+    os.makedirs("docs", exist_ok=True)
 
-    print("🌐 Dashboard interactivo generado en docs/index.html")
+    with open("docs/index.html", "w", encoding="utf-8") as f:
+        f.write(html)
