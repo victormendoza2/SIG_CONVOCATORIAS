@@ -59,29 +59,45 @@ def clasificar_trabajo(texto):
         "sistemas de informacion geografica",
         "arcgis",
         "qgis",
+        "gis",
         "geoespacial",
+        "geospatial",
+        "spatial",
         "cartografía",
         "cartografia"
     ]
 
     data_keywords = [
-    "data analyst",
-    "data analytics",
-    "business intelligence",
-    "bi analyst"
-]
+        "data analyst",
+        "data analytics",
+        "data scientist",
+        "machine learning",
+        "business intelligence",
+        "bi analyst",
+        "sql",
+        "python"
+    ]
+
+    consultoria_keywords = [
+        "consultor",
+        "consultoría",
+        "consultoria",
+        "consultant",
+        "consulting",
+        "tdr"
+    ]
 
     if any(p in texto for p in sig_keywords):
         return "SIG"
 
-    if "power bi" in texto:
-        return "Power BI"
-
     if any(p in texto for p in data_keywords):
         return "Data"
 
-    if any(p in texto for p in ["consultor", "consultoría", "consultoria", "tdr"]):
+    if any(p in texto for p in consultoria_keywords):
         return "Consultoría"
+
+    if "power bi" in texto:
+        return "Power BI"
 
     return "Otros"
 
