@@ -4,26 +4,25 @@ from peru_gov_scraper import buscar_gob_peru
 from excel_export import exportar_excel
 
 
-# 🔎 Palabras clave reales (más estrictas)
 PALABRAS_CLAVE = [
-    # SIG reales
-    "sistemas de información geográfica",
-    "sistemas de informacion geografica",
+    # SIG
     "arcgis",
     "qgis",
+    "geospatial",
     "geoespacial",
+    "cartography",
     "cartografia",
-    "cartografía",
 
-    # Data específicos
-    "analista de datos",
+    # Data reales
     "data analyst",
-    "ciencia de datos",
+    "data analytics",
+    "business intelligence",
+    "bi analyst",
     "power bi",
 
     # Consultoría
     "consultor",
-    "consultoria",
+    "consulting",
     "consultoría",
     "tdr"
 ]
@@ -60,10 +59,11 @@ def clasificar_trabajo(texto):
     ]
 
     data_keywords = [
-        "analista de datos",
-        "data analyst",
-        "ciencia de datos"
-    ]
+    "data analyst",
+    "data analytics",
+    "business intelligence",
+    "bi analyst"
+]
 
     if any(p in texto for p in sig_keywords):
         return "SIG"
