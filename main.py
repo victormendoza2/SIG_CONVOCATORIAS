@@ -156,6 +156,10 @@ def main():
     jobs_filtrados = filtro_inteligente(jobs_total)
     print(f"Después del filtro SIG/Data: {len(jobs_filtrados)}")
 
+    print("Ejemplos encontrados:")
+for j in jobs_filtrados[:3]:
+    print(j["titulo"])
+
     # 🧠 Clasificar categoría y entidad
     for job in jobs_filtrados:
         texto = job.get("titulo", "") + " " + job.get("descripcion", "")
