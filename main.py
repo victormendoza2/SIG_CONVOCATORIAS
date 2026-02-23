@@ -9,22 +9,27 @@ PALABRAS_CLAVE = [
     # SIG
     "arcgis",
     "qgis",
+    "gis",
     "geospatial",
     "geoespacial",
+    "spatial",
     "cartography",
     "cartografia",
 
-    # Data reales
+    # Data
     "data analyst",
     "data analytics",
     "business intelligence",
     "bi analyst",
     "power bi",
+    "sql",
+    "python",
 
     # Consultoría
     "consultor",
     "consulting",
     "consultoría",
+    "consultoria",
     "tdr"
 ]
 
