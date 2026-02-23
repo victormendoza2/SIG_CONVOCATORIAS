@@ -1,33 +1,20 @@
 import requests
-from bs4 import BeautifulSoup
 
 def buscar_gob_peru():
 
     resultados = []
 
     try:
-        url = "https://www.gob.pe"
+        url = "https://www.gob.pe/busquedas?contenido=convocatorias"
         r = requests.get(url, timeout=20)
 
-        soup = BeautifulSoup(r.text, "html.parser")
-
-        textos = soup.get_text().lower()
-
-        keywords = [
-            "convocatoria",
-            "consultoria",
-            "tdr",
-            "servicios"
-        ]
-
-        if any(k in textos for k in keywords):
-
+        if r.status_code == 200:
             resultados.append({
                 "fuente": "GobPeru",
-                "titulo": "Posible convocatoria detectada",
+                "titulo": "Convocatorias Estado Peruano",
                 "empresa": "Estado Peruano",
                 "link": url,
-                "descripcion": "Detectado por palabras clave"
+                "descripcion": "Revisión manual recomendada"
             })
 
     except:
